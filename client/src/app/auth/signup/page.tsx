@@ -1,14 +1,26 @@
 "use client";
+
+import useRequest from "@/hooks/use-request";
 import { FormEvent, useState } from "react";
+import Router from "next/router";
+
 export default function Example() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const { doRequest, errors } = useRequest({
+    url: "/api/users/signup",
+    method: "post",
+    body: { email, password },
+    onSucess: () => Router.push("/"),
+  });
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email) return;
     if (!password) return;
-    console.log(email, password);
+
+    doRequest();
   };
   return (
     <>
@@ -84,13 +96,7 @@ export default function Example() {
           </form>
 
           <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?{" "}
-            <a
-              href="#"
-              className="font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              Start a 14 day free trial
-            </a>
+            {errors.map((err) => err.message).join(", ")}
           </p>
         </div>
       </div>
