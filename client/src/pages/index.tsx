@@ -1,31 +1,14 @@
-import axios from "axios";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import buildClient from "../../api/build-client";
 
-export const getServerSideProps = (async () => {
-  if (typeof window === "undefined") {
-    // SERVICE_NAME.NAMESPACE.svc.cluster.local
-    const { data } = await axios.get(
-      "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
-      {
-        headers: {
-          Host: "ticketing.dev",
-        },
-      }
-    );
+export const getServerSideProps = (async (context) => {
+  const { data } = await buildClient(context).get("/api/users/currentuser");
 
-    return {
-      props: {
-        currentUser: data,
-      },
-    };
-  } else {
-    const { data } = await axios.get("/api/users/currentuser");
-    return {
-      props: {
-        currentUser: data,
-      },
-    };
-  }
+  return {
+    props: {
+      currentUser: data,
+    },
+  };
 }) satisfies GetServerSideProps<any>;
 
 export default function LoadingPage({
