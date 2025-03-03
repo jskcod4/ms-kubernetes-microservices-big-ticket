@@ -1,15 +1,13 @@
 "use client";
 
 import useRequest from "@/hooks/use-request";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Example() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-
-  useEffect(() => {}, []);
 
   const { doRequest, errors } = useRequest({
     url: "/api/users/signup",
