@@ -16,5 +16,5 @@ export default function LoadingPage({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   console.log(currentUser);
 
-  return <h1>Test of project</h1>;
+  return currentUser ? <h1>Your are signed in</h1> : <h1>Test of project</h1>;
 }
